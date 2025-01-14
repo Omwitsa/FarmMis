@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarmMis", "FarmMis\FarmMis.csproj", "{FA8FAAA4-95A5-4785-A673-6AAA2A46B1D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarmMis", "FarmMis\FarmMis.csproj", "{5F68F10C-21D1-486C-AE43-CC50A9DE7A8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FA8FAAA4-95A5-4785-A673-6AAA2A46B1D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA8FAAA4-95A5-4785-A673-6AAA2A46B1D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA8FAAA4-95A5-4785-A673-6AAA2A46B1D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA8FAAA4-95A5-4785-A673-6AAA2A46B1D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F68F10C-21D1-486C-AE43-CC50A9DE7A8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F68F10C-21D1-486C-AE43-CC50A9DE7A8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F68F10C-21D1-486C-AE43-CC50A9DE7A8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F68F10C-21D1-486C-AE43-CC50A9DE7A8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,5 @@
 ﻿using AAAErp.Controllers;
 using AAAErp.IProvider;
-using AAAErp.Models.MISModel;
 using AAAErp.ViewModel;
 using MailKit.Net.Smtp;
 using MailKit.Security;

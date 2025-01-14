@@ -27,17 +27,6 @@ namespace AAAErp.Models
         [StringLength(20)]
         public string? SocketOption { get; set; }
         [StringLength(50)]
-        public string? HrMail { get; set; }
-        [StringLength(100)]
-        public string? HrMailPwd { get; set; }
-        [StringLength(50)]
-        public string? IngressUserName { get; set; }
-        [StringLength(100)]
-        public string? IngressPassword { get; set; }
-        [StringLength(50)]
-        public string? IngressServer { get; set; }
-        public int IngressBackMonths { get; set; }
-        [StringLength(250)]
-        public string? BackupLoc { get; set; }
+        public string? Farm { get; set; }
     }
 }

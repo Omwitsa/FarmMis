@@ -19,18 +19,14 @@ namespace AAAErp.Controllers
         private readonly CoreDbContext _context;
         private readonly IWebHostEnvironment _env;
         private readonly IEmailProvider _emailProvider;
-        private readonly BackupUpdator _backupUpdator;
-        private readonly BackupCopierNUpdator _backupCopierNUpdator;
         private MenuBuilder menuBuilder;
-        public AdminController(CoreDbContext context, INotyfService notyf, IWebHostEnvironment env, IEmailProvider emailProvider, IRawQuery rawQuery)
+        public AdminController(CoreDbContext context, INotyfService notyf, IWebHostEnvironment env, IEmailProvider emailProvider)
         {
             _env = env;
             _notyf = notyf;
             _context = context;
             _emailProvider = emailProvider;
             menuBuilder = new MenuBuilder(context);
-            _backupUpdator = new BackupUpdator(context, env, rawQuery);
-            _backupCopierNUpdator = new BackupCopierNUpdator(context, env, rawQuery);
         }
 
         [Authorize(Roles = "System Setup")]
@@ -44,7 +40,7 @@ namespace AAAErp.Controllers
 
         [Authorize(Roles = "System Setup")]
         [HttpPost]
-        public IActionResult SysSetup([Bind("Name,Initials,Address,LogoImageUrl,ThemeColor,SecondaryColor,SmtpServer,SmtpUserName,SmtpPassword,SmtpPort,SocketOption,IngressUserName,IngressPassword,IngressServer,IngressBackMonths,BackupLoc,HrMail,HrMailPwd")] SysSetup setting)
+        public IActionResult SysSetup([Bind("Name,Initials,Address,LogoImageUrl,ThemeColor,SecondaryColor,SmtpServer,SmtpUserName,SmtpPassword,SmtpPort,SocketOption")] SysSetup setting)
         {
             try
             {
@@ -69,14 +65,7 @@ namespace AAAErp.Controllers
                 portalSetting.SmtpPassword = string.IsNullOrEmpty(setting.SmtpPassword) ? portalSetting.SmtpPassword : Decryptor.Encrypt(setting.SmtpPassword);
                 portalSetting.SmtpPort = setting.SmtpPort;
                 portalSetting.SocketOption = setting.SocketOption;
-                portalSetting.IngressUserName = setting.IngressUserName;
-                portalSetting.IngressPassword = string.IsNullOrEmpty(setting.IngressPassword) ? portalSetting.IngressPassword : Decryptor.Encrypt(setting.IngressPassword);
-                portalSetting.IngressServer = setting.IngressServer;
-                portalSetting.IngressBackMonths = setting.IngressBackMonths;
-                portalSetting.BackupLoc = setting.BackupLoc;
-                portalSetting.HrMail = setting.HrMail;
-                portalSetting.HrMailPwd = string.IsNullOrEmpty(setting.HrMailPwd) ? portalSetting.HrMailPwd : Decryptor.Encrypt(setting.HrMailPwd);
-
+               
                 _context.SaveChanges();
                 _notyf.Success("System Setup updated successfully");
             }
@@ -86,129 +75,7 @@ namespace AAAErp.Controllers
             }
             return View(setting);
         }
-        
-        [Authorize(Roles = "Site Setup")]
-        public IActionResult NewSite()
-        {
-            var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
-            menuBuilder.BuildMenus(this, userId, "Site Setup");
-            return View();
-        }
-
-        [Authorize(Roles = "Site Setup")]
-        [HttpPost]
-        public IActionResult NewSite([Bind("Name,Contact,IngressUserName,IngressPassword,IngressServer,IngressDb,HoIngressDb,Closed")] Site site)
-        {
-            try
-            {
-                var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
-                menuBuilder.BuildMenus(this, userId, "Site Setup");
-
-                site.IngressPassword = Decryptor.Encrypt(site.IngressPassword);
-                site.Name = site?.Name ?? "";
-                if (string.IsNullOrEmpty(site.Name))
-                {
-                    _notyf.Error("Kindly provide the site");
-                    return View(site);
-                }
-                if (_context.Sites.Any(s => s.Name.ToUpper().Equals(site.Name.ToUpper())))
-                {
-                    _notyf.Error("Sorry, Site already exist");
-                    return View(site);
-                }
-                _context.Sites.Add(site);
-                _context.SaveChanges();
-                _notyf.Success("Site added successfully");
-                return RedirectToAction("ListSites");
-            }
-            catch (Exception)
-            {
-                _notyf.Error("Sorry, An error occurred");
-                return View(site);
-            }
-        }
-
-        [Authorize(Roles = "Site Setup")]
-        public IActionResult EditSite(int? id)
-        {
-            var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
-            menuBuilder.BuildMenus(this, userId, "Site Setup");
-
-            if (id == null)
-                return NotFound();
-
-            var site = _context.Sites.FirstOrDefault(s => s.Id == id);
-            if (site == null)
-                return NotFound();
-
-            return View(site);
-
-        }
-
-        [Authorize(Roles = "Site Setup")]
-        [HttpPost]
-        public IActionResult EditSite([Bind("Id,Name,Contact,IngressUserName,IngressPassword,IngressServer,IngressDb,HoIngressDb,Closed")] Site site)
-        {
-            try
-            {
-                var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
-                menuBuilder.BuildMenus(this, userId, "Site Setup");
-
-                site.Name = site?.Name ?? "";
-                if (string.IsNullOrEmpty(site.Name))
-                {
-                    _notyf.Error("Kindly provide the site");
-                    return View(site);
-                }
-                if (_context.Sites.Any(s => s.Name.ToUpper().Equals(site.Name.ToUpper()) && s.Id != site.Id))
-                {
-                    _notyf.Error("Sorry, Site already exist");
-                    return View(site);
-                }
-
-                var savedSite = _context.Sites.FirstOrDefault(s => s.Id == site.Id);
-                savedSite.Name = site.Name;
-                savedSite.Contact = site.Contact;
-                savedSite.IngressUserName = site.IngressUserName;
-                savedSite.IngressPassword = string.IsNullOrEmpty(site.IngressPassword) ? savedSite.IngressPassword : Decryptor.Encrypt(site.IngressPassword);
-                savedSite.IngressServer = site.IngressServer;
-                savedSite.IngressDb = site.IngressDb;
-                savedSite.HoIngressDb = site.HoIngressDb;
-                savedSite.Closed = site.Closed;
-
-                _context.SaveChanges();
-                _notyf.Success("Site update successfully");
-                return RedirectToAction("ListSites");
-            }
-            catch (Exception)
-            {
-                _notyf.Error("Sorry, An error occurred");
-                return View(site);
-            }
-        }
-
-        [Authorize(Roles = "Site Setup")]
-        public async Task<IActionResult> ListSites(FilterSitesVm? filter)
-        {
-            filter.Page = filter?.Page ?? 1;
-            var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
-            menuBuilder.BuildMenus(this, userId, "Site Setup");
-
-            filter.Page = filter.Page < 1 ? 1 : filter.Page;
-            var sites = await GetSites(filter);
-            int totalItems = sites.Count();
-            var pager = new Pager(totalItems, filter.Page, StrValues.PageSize);
-            int skip = (filter.Page - 1) * StrValues.PageSize;
-            var data = sites.Skip(skip).Take(pager.PageSize).ToList();
-
-            ViewBag.Pager = pager;
-            return View(new SiteListFormVm
-            {
-                List = data,
-                Filter = filter
-            });
-        }
-
+      
         [Authorize(Roles = "Users")]
         public async Task<IActionResult> ListUsers(FilterUsersVm? filter)
         {
@@ -242,16 +109,6 @@ namespace AAAErp.Controllers
             return users;
         }
 
-        private async Task<List<Site>> GetSites(FilterSitesVm filter)
-        {
-            var sites = await _context.Sites.Where(u => (string.IsNullOrEmpty(filter.Site) || u.Name.ToUpper().Equals(filter.Site.ToUpper())))
-                .OrderByDescending(s => s.Id).ToListAsync();
-            if (!filter.InActive)
-                sites = sites.Where(u => !u.Closed).ToList();
-
-            return sites;
-        }
-
         private async Task<List<UserGroup>> GetUserGroups(FilterUserGroupsVm filter)
         {
             var userGroups = await _context.UserGroups.Where(u => (string.IsNullOrEmpty(filter.UserGroup) || u.Name.ToUpper().Equals(filter.UserGroup.ToUpper())))
@@ -261,7 +118,6 @@ namespace AAAErp.Controllers
 
             return userGroups;
         }
-
 
         [Authorize]
         public async Task<IActionResult> PdfUsers(FilterUsersVm? filter)
@@ -315,16 +171,6 @@ namespace AAAErp.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> PdfSites(FilterSitesVm? filter)
-        {
-            var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
-            menuBuilder.BuildMenus(this, userId, "Site Setup");
-            var sites = await GetSites(filter);
-
-            return new ViewAsPdf(sites);
-        }
-
-        [Authorize]
         public async Task<IActionResult> ExcelUserGroups(FilterUserGroupsVm? filter)
         {
             var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
@@ -369,51 +215,6 @@ namespace AAAErp.Controllers
             return new ViewAsPdf(sites);
         }
 
-        [Authorize]
-        public async Task<IActionResult> ExcelSites(FilterSitesVm? filter)
-        {
-            var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
-            menuBuilder.BuildMenus(this, userId, "Site Setup");
-            var sites = await GetSites(filter);
-            var currentRow = 1;
-            var now = DateTime.UtcNow.AddHours(3);
-            var workbook = new XLWorkbook();
-            var worksheet = workbook.Worksheets.Add("Sites");
-            worksheet.Cell(currentRow, 2).Value = "" + now;
-            currentRow++;
-            worksheet.Cell(currentRow, 2).Value = "Sites";
-            currentRow++;
-
-            worksheet.Rows(currentRow, currentRow).Style.Font.Bold = true;
-            worksheet.Cell(currentRow, 1).Value = "Name";
-            worksheet.Cell(currentRow, 2).Value = "Contact";
-            worksheet.Cell(currentRow, 3).Value = "Ingress UserName";
-            worksheet.Cell(currentRow, 4).Value = "Ingress Server";
-            worksheet.Cell(currentRow, 5).Value = "Ingress Db";
-            worksheet.Cell(currentRow, 6).Value = "Ho Ingress Db";
-            worksheet.Cell(currentRow, 7).Value = "LastBackup";
-            foreach (var site in sites)
-            {
-                currentRow++;
-                worksheet.Cell(currentRow, 1).Value = site.Name;
-                worksheet.Cell(currentRow, 2).Value = site.Contact;
-                worksheet.Cell(currentRow, 3).Value = site.IngressUserName;
-                worksheet.Cell(currentRow, 4).Value = site.IngressServer;
-                worksheet.Cell(currentRow, 5).Value = site.IngressDb;
-                worksheet.Cell(currentRow, 6).Value = site.HoIngressDb;
-                worksheet.Cell(currentRow, 7).Value = site.LastBackup;
-            }
-
-            using (var stream = new MemoryStream())
-            {
-                workbook.SaveAs(stream);
-                var content = stream.ToArray();
-                return File(content,
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    $"Sites__{now}.xlsx");
-            }
-        }
-
         [Authorize(Roles = "Users")]
         public IActionResult NewUser()
         {
@@ -429,9 +230,7 @@ namespace AAAErp.Controllers
         {
             var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
             menuBuilder.BuildMenus(this, userId, "Users");
-
-            var sites = _context.Sites.Where(s => !s.Closed).Select(s => s.Name).ToList();
-            ViewBag.sites = new SelectList(sites);
+           
             var groups = _context.UserGroups.Where(s => !s.Closed).Select(s => s.Name).ToList();
             ViewBag.groups = new SelectList(groups);
         }
@@ -677,48 +476,6 @@ namespace AAAErp.Controllers
             {
                 _notyf.Error("Sorry, An error occurred");
                 return Json("");
-            }
-        }
-
-        [Authorize(Roles = "Backup Attendance")]
-        public async Task<IActionResult> Ingress(string site = "", bool success = true)
-        {
-            var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
-            menuBuilder.BuildMenus(this, userId, "Backup Attendance");
-
-            var sites = await _context.Sites.Where(s => !s.Name.ToUpper().Equals("HO")).Select(s => s.Name).ToListAsync();
-            ViewBag.success = success;
-            ViewBag.importationMsg = $"Sorry, Importation of {site} attendance data failed";
-            ViewBag.sites = new SelectList(sites);
-            return View();
-        }
-
-        [Authorize(Roles = "Backup Attendance")]
-        [HttpPost]
-        public async Task<IActionResult> BackupIngress([Bind("Site")] IngressVm ingress)
-        {
-            try
-            {
-                var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
-                menuBuilder.BuildMenus(this, userId, "Backup Attendance");
-
-                // Remove duplicates
-
-                var BackupResp = await _backupCopierNUpdator.Backup(ingress.Site);
-                //var BackupResp = await _backupUpdator.Backup(ingress.Site);
-                if (!BackupResp.Success)
-                {
-                    _notyf.Error(BackupResp.Message);
-                    return RedirectToAction("Ingress", new { ingress.Site, BackupResp.Success });
-                }
-
-                _notyf.Success("Ingress Backuped successfully");
-                return RedirectToAction("Ingress", new { ingress.Site, BackupResp.Success });
-            }
-            catch (Exception)
-            {
-                _notyf.Error("Sorry, An error occurred");
-                return RedirectToAction("Ingress", new { ingress.Site, success = false });
             }
         }
     }

@@ -13,12 +13,6 @@ namespace AAAErp.ViewModel
         public FilterUsersVm Filter { get; set; }
     }
 
-    public class SiteListFormVm
-    {
-        public IEnumerable<Site> List { get; set; }
-        public FilterSitesVm Filter { get; set; }
-    }
-
     public class UsergroupListFormVm
     {
         public IEnumerable<UserGroup> List { get; set; }

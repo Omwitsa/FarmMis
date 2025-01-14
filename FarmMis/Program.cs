@@ -7,25 +7,21 @@ using AAAErp.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Rotativa.AspNetCore;
-using AAAErp.Models.MISModel;
 using Hangfire;
 using Hangfire.MySql;
 using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
-var misConnectionString = builder.Configuration.GetConnectionString("MisConnectionString");
 
 //builder.Services.AddDbContext<CoreDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddDbContext<CoreDbContext>(option => option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-builder.Services.AddDbContext<MisDbContext>(option => option.UseMySql(misConnectionString, ServerVersion.AutoDetect(misConnectionString)));
 
 builder.Services.AddHangfire(x => x.UseStorage(new MySqlStorage(connectionString, new MySqlStorageOptions { TablesPrefix = "Hangfire_" })));
 builder.Services.AddHangfireServer();
 
 builder.Services.AddScoped<ICronJobProvider, CronJobProvider>();
 builder.Services.AddTransient<IEmailProvider, EmailProvider>();
-builder.Services.AddTransient<IRawQuery, RawQuery>();
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 10;
@@ -92,7 +88,7 @@ using (var serviceScope = app.Services.CreateScope())
     //var context = services.GetRequiredService<MisDbContext>();
 
     //recurringJob.AddOrUpdate("BirthdayMails", () => cronJob.SendBirtdayMails(), Cron.Daily(4, 0));
-    recurringJob.AddOrUpdate("BirthdayMails", () => cronJob.SendBirtdayMails(), Cron.Hourly);
+    //recurringJob.AddOrUpdate("BirthdayMails", () => cronJob.SendMail(), Cron.Hourly);
 
     //Cron.Daily();  -  "0 0 * * *"  Every night at 12:00 AM (default UTC time)
     //recurringJob.AddOrUpdate("AttendanceBackup1", () => cronJob.BackupAttendance(), Cron.Daily(backup1Time.Hours, backup1Time.Minutes), TimeZoneInfo.Local);

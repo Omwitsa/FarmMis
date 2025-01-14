@@ -30,13 +30,6 @@ namespace AAAErp.Constants
                 Action = "SysSetup",
             },
             new PrivilegeVm {
-                Code = "1002",
-                Name = "Site Setup",
-                ParentCode = "10",
-                Controller = "Admin",
-                Action = "ListSites",
-            },
-            new PrivilegeVm {
                 Code = "1003",
                 Name = "User Group",
                 ParentCode = "10",
@@ -50,52 +43,31 @@ namespace AAAErp.Constants
                 Controller = "Admin",
                 Action = "ListUsers",
             },
+            
             new PrivilegeVm {
-                Code = "1005",
-                Name = "Backup Attendance",
-                ParentCode = "10",
-                Controller = "Admin",
-                Action = "Ingress",
-            },
-            //new PrivilegeVm {
-            //    Code = "11",
-            //    Name = "Finance",
-            //    ParentCode = "",
-            //},
-            //new PrivilegeVm {
-            //    Code = "1101",
-            //    Name = "Account Receivables",
-            //    ParentCode = "11",
-            //},
-            //new PrivilegeVm {
-            //    Code = "1102",
-            //    Name = "Account Payables",
-            //    ParentCode = "11",
-            //},
-            //new PrivilegeVm {
-            //    Code = "110201",
-            //    Name = "Petty Cash",
-            //    ParentCode = "1102",
-            //},
-
-            new PrivilegeVm {
-                Code = "12",
-                Name = "Hr Management",
+                Code = "11",
+                Name = "Packhouse",
                 ParentCode = "",
             },
-            // Utility should be the last item on a menu
             new PrivilegeVm {
-                Code = "1220",
-                Name = "Utilities",
-                ParentCode = "12",
+                Code = "1101",
+                Name = "Packlist",
+                ParentCode = "11",
+                Controller = "Packhouse",
+                Action = "Packlist",
             },
-            new PrivilegeVm {
-                Code = "122001",
-                Name = "HR Setup",
-                ParentCode = "1220",
-                Controller = "Hr",
-                Action = "HrSetup",
-            },
+            //new PrivilegeVm {
+            //    Code = "1101",
+            //    Name = "Utilities",
+            //    ParentCode = "11",
+            //},
+            //new PrivilegeVm {
+            //    Code = "110101",
+            //    Name = "HR Setup",
+            //    ParentCode = "1101",
+            //    Controller = "Hr",
+            //    Action = "HrSetup",
+            //},
         };
     }
 }

@@ -46,7 +46,7 @@ namespace AAAErp.Controllers
 
         public JsonResult TestMail()
         {
-            _jobProvider.SendBirtdayMails();
+            //_jobProvider.SendBirtdayMails();
             return Json("");
         }
 

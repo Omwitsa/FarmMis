@@ -15,36 +15,8 @@ namespace AAAErp.Models
                     SmtpServer = "mail.aaagrowers.co.ke",
                     SmtpUserName = "ingress.bkpauto@aaagrowers.co.ke",
                     SmtpPassword = Decryptor.Encrypt("Ib@$#@9les!"),
-                    HrMail = "ingress.bkpauto@aaagrowers.co.ke",
-                    HrMailPwd = Decryptor.Encrypt("Ib@$#@9les!"),
                     SmtpPort = 587, // 587, 465
                     SocketOption = "TLS", // TLS, SSL, NONE
-                    IngressUserName = "root",
-                    IngressPassword = Decryptor.Encrypt("Ingress2023"),
-                    IngressServer = "localhost",
-                    IngressBackMonths = 2
-                });
-            }
-
-            if (!context.HrSetup.Any())
-            {
-                context.Add(new HrSetup
-                {
-                    BirthdayMsg = "", // TLS, SSL, NONE
-                    BirthdayMsgSbj = "",
-                });
-            }
-
-            if (!context.Sites.Any())
-            {
-                context.Add(new Site
-                {
-                    Name = "HO",
-                    IngressUserName = "root",
-                    IngressPassword = Decryptor.Encrypt("Ingress2023"),
-                    IngressServer = "localhost",
-                    IngressDb = "ingress",
-                    HoIngressDb = "ingress"
                 });
             }
 

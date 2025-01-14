@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AAAErp.Migrations
+namespace FarmMis.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
     partial class CoreDbContextModelSnapshot : ModelSnapshot
@@ -39,85 +39,6 @@ namespace AAAErp.Migrations
                     b.ToTable("AssignedGroups");
                 });
 
-            modelBuilder.Entity("AAAErp.Models.HrSetup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("BirthdayImg")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("BirthdayMsg")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("BirthdayMsgSbj")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("LastBirthdayWishDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("NoOfStaffWished")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HrSetup");
-                });
-
-            modelBuilder.Entity("AAAErp.Models.Site", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Closed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Contact")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("HoIngressDb")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("IngressDb")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("IngressPassword")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("IngressServer")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("IngressUserName")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("LastBackup")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Personnel")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sites");
-                });
-
             modelBuilder.Entity("AAAErp.Models.SysSetup", b =>
                 {
                     b.Property<int>("Id")
@@ -128,30 +49,7 @@ namespace AAAErp.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("BackupLoc")
-                        .HasMaxLength(250)
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<string>("HrMail")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("HrMailPwd")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int>("IngressBackMonths")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IngressPassword")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("IngressServer")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("IngressUserName")
+                    b.Property<string>("Farm")
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
