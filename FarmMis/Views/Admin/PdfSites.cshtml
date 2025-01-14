@@ -1,0 +1,90 @@
+﻿@model IEnumerable<AAAErp.Models.Site>
+@{
+    var count = 0;
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<partial name="../PartialView/_HtmlHeader.cshtml" />
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-header-text">Sites</h5>
+                    <div class="f-right">
+                        <label class="badge badge-inverse-default">@DateTime.UtcNow.AddHours(3)</label>
+                    </div>
+                </div>
+
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-sm-12 table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Name)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Contact)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.IngressUserName)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.IngressServer)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.IngressDb)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.HoIngressDb)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.LastBackup)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        ++count;
+                                        <tr>
+                                            <td> @count </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Contact)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.IngressUserName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.IngressServer)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.IngressDb)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.HoIngressDb)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.LastBackup)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

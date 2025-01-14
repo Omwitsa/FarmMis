@@ -1,0 +1,93 @@
+﻿@model AAAErp.ViewModel.IngressVm
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="main-header">
+        </div>
+    </div>
+
+    <div class="row">
+        <!--Basic Form starts-->
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-header-text">Backup Ingress</h5>
+                    <div class="f-right">
+                        <a href="" data-toggle="modal" data-target="#basic-form-Modal"><i class="icofont icofont-code-alt"></i></a>
+                    </div>
+                </div>
+
+                @* <div class="card-block">
+                    
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <a class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20" asp-controller="Admin" asp-action="BackupIngress">Back Up</a>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <a class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20" asp-controller="Admin" asp-action="SendIngressbackup">Send</a>
+                        </div>
+                    </div>
+                </div> *@
+
+                <form asp-action="BackupIngress" id="backup-form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Setup</strong>
+                        </div>
+
+                        <div class="card-body card-block">
+                            @if (!ViewBag.success)
+                            {
+                                <p class="m-b-20 errorMsg">
+                                    <code> @ViewBag.importationMsg </code>
+                                </p>
+                            }
+                           
+                            <div class="row">
+                                <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                    <label class="form-control-label">Site<span class="required">*</span></label>
+                                    <select asp-for="Site" class="form-control site" asp-items="@ViewBag.sites" required></select>
+                                    <span asp-validation-for="Site" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                           @*  <div class="col-xs-12 col-sm-6">
+                                <a class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20" asp-controller="Admin" asp-action="BackupIngress">Back Up</a>
+                            </div> *@
+                            <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light btn-backup">
+                                <i class="fa fa-dot-circle-o"></i> Back Up
+                            </button>
+                            @* <a asp-controller="Backup" asp-action="Index" class="btn btn-secondary btn-sm waves-effect">
+                                <i class="fa fa-ban"></i> Back
+                            </a> *@
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript">
+        $(function () {
+            let btn_clicked = false;
+            $('.site').on('change', function () {
+                $(".errorMsg").text('');
+            });
+            $('.btn-backup').on('click', function () {
+                if (btn_clicked) {
+                    $(this).prop("disabled", true);
+                }
+                $(".errorMsg").text('');
+                btn_clicked = true;
+            });
+        });
+    </script>
+}

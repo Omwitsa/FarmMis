@@ -1,0 +1,11 @@
+.required {
+  color: red;
+}
+
+thead, tfoot { display: table-row-group }
+
+.access-header {
+     writing-mode: vertical-lr;
+    -webkit-transform: rotate(-180deg);
+    -moz-transform: rotate(-180deg);
+}

@@ -1,0 +1,84 @@
+﻿@model AAAErp.ViewModel.LoginVm
+
+@{
+	Layout = null;
+	var returnUrl = ViewData["ReturnUrl"] as string;
+	returnUrl = System.Net.WebUtility.UrlEncode(returnUrl);
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<partial name="../PartialView/_HtmlHeader.cshtml" />
+<body>
+	<section class="login p-fixed d-flex text-center bg-primary common-img-bg">
+		<!-- Container-fluid starts -->
+		<div class="container-fluid">
+			<div class="row">
+
+				<div class="col-sm-12">
+					<div class="login-card card-block">
+						<form asp-action="Login" class="md-float-material">
+							<div class="text-center">
+								@* <img src="files/assets/images/logo.png" alt="logo"> *@
+							</div>
+							<h3 class="text-center txt-primary">
+								Sign In
+							</h3>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="md-input-wrapper">
+										<input asp-for="UserID" type="text" class="md-form-control" required="required" />
+										<label>User Id</label>
+										<span asp-validation-for="UserID" class="text-danger"></span>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="md-input-wrapper">
+										<input asp-for="Password" type="password" class="md-form-control" required="required" />
+										<label>Password</label>
+										<span asp-validation-for="Password" class="text-danger"></span>
+									</div>
+								</div>
+								
+								@* <div class="col-sm-6 col-xs-12 forgot-phone text-right">
+									<a href="#" class="text-right f-w-600"> Forget Password?</a>
+								</div> *@
+							</div>
+							<div class="row">
+								<div class="col-xs-10 offset-xs-1">
+									<button type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">LOGIN</button>
+								</div>
+							</div>
+						</form>
+						<!-- end of form -->
+					</div>
+					<!-- end of login-card -->
+				</div>
+				<!-- end of col-sm-12 -->
+			</div>
+			<!-- end of row -->
+		</div>
+		<!-- end of container-fluid -->
+	</section>
+
+	<!-- Required Jqurey -->
+	<script src="~/files/assets/plugins/Jquery/dist/jquery.min.js"></script>
+	<script src="~/files/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+	<script src="~/files/assets/plugins/tether/dist/js/tether.min.js"></script>
+
+	<!-- Required Fremwork -->
+	<script src="~/files/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- notification -->
+	@* <script src="~/files/assets/plugins/notification/js/bootstrap-growl.min.js"></script> *@
+	<!-- waves effects.js -->
+	<script src="~/files/assets/plugins/Waves/waves.min.js"></script>
+
+	<!-- custom js -->
+	<script type="text/javascript" src="~/files/assets/pages/elements.js"></script>
+	@* <script src="~/files/assets/js/menu.min.js"></script> *@
+	<script src="~/js/custom.js"></script>
+	@await Component.InvokeAsync("Notyf")
+</body>
+</html>

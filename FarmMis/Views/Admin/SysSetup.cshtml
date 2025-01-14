@@ -1,0 +1,94 @@
+﻿@model AAAErp.Models.SysSetup
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="main-header">
+        </div>
+    </div>
+
+    <div class="row">
+        <!--Basic Form starts-->
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-header-text">System Setup</h5>
+                    <div class="f-right">
+                        <a href="" data-toggle="modal" data-target="#basic-form-Modal"><i class="icofont icofont-code-alt"></i></a>
+                    </div>
+                </div>
+                
+                <div class="card-block">
+                    <form asp-action="SysSetup">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Org Name <span class="required">*</span></label>
+                                <input asp-for="Name" class="form-control" type="text" required>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Org Initials</label>
+                                <input asp-for="Initials" class="form-control" type="text">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Smtp Server</label>
+                                <input asp-for="SmtpServer" class="form-control" type="text">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Smtp UserName</label>
+                                <input asp-for="SmtpUserName" class="form-control" type="text">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Smtp Password</label>
+                                <input asp-for="SmtpPassword" class="form-control" type="password">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Smtp Port</label>
+                                <input asp-for="SmtpPort" class="form-control" type="text">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Socket Option</label>
+                                <input asp-for="SocketOption" class="form-control" type="text">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Hr Mail</label>
+                                <input asp-for="HrMail" class="form-control" type="text">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Hr Mail Password</label>
+                                <input asp-for="HrMailPwd" class="form-control" type="password">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Ingress UserName</label>
+                                <input asp-for="IngressUserName" class="form-control" type="text">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Ingress Password</label>
+                                <input asp-for="IngressPassword" class="form-control" type="password">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Ingress Server</label>
+                                <input asp-for="IngressServer" class="form-control" type="text">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Ingress Back Months <span class="required">*</span></label>
+                                <input asp-for="IngressBackMonths" class="form-control" type="text" required>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Backup Location <span class="required">*</span></label>
+                                <input asp-for="BackupLoc" class="form-control" type="text" required>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                <label class="form-control-label">Address</label>
+                                <textarea asp-for="Address" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        @if (ViewBag.hasEditRight)
+                        {
+                            <button type="submit" class="btn btn-primary waves-effect waves-light">Save</button>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

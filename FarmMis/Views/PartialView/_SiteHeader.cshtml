@@ -1,0 +1,103 @@
+﻿<!-- Navbar-->
+      <header class="main-header-top hidden-print">
+    <a href="index.html" class="logo">AAA
+        @* <img class="img-fluid able-logo" src="files/assets/images/logo.png" alt="Theme-logo"> *@
+        </a>
+         <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#!" data-toggle="offcanvas" class="sidebar-toggle"></a>
+            <!-- Navbar Right Menu-->
+            <div class="navbar-custom-menu f-right">
+               <ul class="top-nav">
+                  <!--Notification Menu-->
+                @*     <li class="dropdown notification-menu">
+                        <a href="#!" data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle">
+                            <i class="icon-bell"></i>
+                            <span class="badge badge-danger header-badge">2</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="not-head">You have <b class="text-primary">2</b> new notifications.</li>
+                            <li class="bell-notification">
+                                <a href="javascript:;" class="media">
+                                    <span class="media-left media-icon">
+                                        <img class="img-circle" src="assets/images/avatar-1.png" alt="User Image">
+                                    </span>
+                                    <div class="media-body"><span class="block">Lisa sent you a mail</span><span class="text-muted block-time">2min ago</span></div>
+                                </a>
+                            </li>
+
+                            <li class="not-footer">
+                                <a href="#!">See all notifications.</a>
+                            </li>
+                        </ul>
+                    </li> *@
+                  <!-- chat dropdown -->
+                @* <li class="pc-rheader-submenu ">
+                    <a href="#!" class="drop icon-circle displayChatbox">
+                        <i class="icon-bubbles"></i>
+                        <span class="badge badge-danger header-badge">2</span>
+                    </a>
+                </li> *@
+                 
+                  <li class="dropdown">
+                     <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
+                        <span><img class="img-circle " src="/files/assets/images/avatar-1.png" style="width:40px;" alt="User Image"></span>
+                        <span><b>@User.Identity.Name</b> <i class=" icofont icofont-simple-down"></i></span>
+                     </a>
+                     <ul class="dropdown-menu settings-menu">
+                        <li><a href="#!"><i class="icon-settings"></i> Settings</a></li>
+                        <li class="p-0">
+                           <div class="dropdown-divider m-0"></div>
+                        </li>
+                        <li><a asp-controller="Home" asp-action="Logout"><i class="icon-logout"></i> Logout</a></li>
+                     </ul>
+                  </li>
+               </ul>
+            </div>
+         </nav>
+      </header>
+
+<div id="sidebar" class="p-fixed header-users showChat">
+    <div class="had-container">
+        <div class="card card_main header-users-main">
+            <div class="card-content user-box">
+                <div class="md-group-add-on p-20">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-search-alt-2 chat-search"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                        <input type="text" class="md-form-control" name="username" id="search-friends">
+                        <label>Search</label>
+                    </div>
+
+                </div>
+                <div class="media friendlist-main">
+                    <h6>Friend List</h6>
+                </div>
+                <div class="main-friend-list">
+                    <div class="media friendlist-box" data-id="1" data-status="online" data-username="Josephin Doe" data-toggle="tooltip" data-placement="left" title="Josephin Doe">
+
+                        <a class="media-left" href="#!">
+                            <img class="media-object img-circle" src="assets/images/avatar-1.png" alt="Generic placeholder image">
+                            <div class="live-status bg-success"></div>
+                        </a>
+                        <div class="media-body">
+                            <div class="friend-header">Josephin Doe</div>
+                            <span>20min ago</span>
+                        </div>
+                    </div>
+                    <div class="media friendlist-box" data-id="3" data-status="online" data-username="Alice" data-toggle="tooltip" data-placement="left" title="Alice">
+                        <a class="media-left" href="#!">
+                            <img class="media-object img-circle" src="assets/images/avatar-2.png" alt="Generic placeholder image">
+                            <div class="live-status bg-success"></div>
+                        </a>
+                        <div class="media-body">
+                            <div class="friend-header">Alice</div>
+                            <span>1 hour ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

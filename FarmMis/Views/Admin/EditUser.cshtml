@@ -1,0 +1,217 @@
+﻿@model AAAErp.Models.User
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="main-header">
+        </div>
+    </div>
+
+    <div class="row">
+        <!--Basic Form starts-->
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-header-text">Edit</h5>
+                </div>
+
+                <div class="card-block">
+                    <form asp-action="EditUser">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input id="id" type="hidden" asp-for="Id" />
+                        <ul class="nav nav-tabs md-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#user" role="tab">User</a>
+                                <div class="slide"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#groups" role="tab">Groups</a>
+                                <div class="slide"></div>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="user" role="tabpanel">
+                                <div class="row">
+                                    <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                        <label class="form-control-label">User Id <span class="required">*</span></label>
+                                        <input id="userID" asp-for="UserID" class="form-control" type="text" autocomplete="off" required>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                        <label class="form-control-label">Names</label>
+                                        <input id="names" asp-for="Names" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                        <label class="form-control-label">Password <span class="required">*</span></label>
+                                        <input id="password" asp-for="Password" class="form-control" type="password" required>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                        <label class="form-control-label">Confirm Password <span class="required">*</span></label>
+                                        <input id="confirmPassword" asp-for="ConfirmPassword" class="form-control" type="password" required>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                        <label class="form-control-label">Email</label>
+                                        <input id="email" asp-for="Email" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                        <label class="form-control-label">Phone</label>
+                                        <input id="phone" asp-for="Phone" class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                        <label class="form-control-label">Site <span class="required">*</span></label>
+                                        <select id="user-site" asp-for="Site" class="form-control" asp-items="@ViewBag.sites" required></select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-12">
+                                        <fieldset>
+                                            <legend>Access Level:<span class="required">*</span></legend>
+                                            <div>
+                                                <input type="radio" id="general" asp-for="AccessLevel" value="1" checked=@(Model.AccessLevel == AccessLevel.General) />
+                                                <label for="general">General</label>
+
+                                                <input type="radio" id="site" asp-for="AccessLevel" value="2" checked=@(Model.AccessLevel == AccessLevel.Site) />
+                                                <label for="site">Site</label>
+                                            </div>
+                                        </fieldset><br />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="checkbox checkbox-primary">
+                                        <div class="col-sm-12">
+                                            <input id="status" type="checkbox" asp-for="Status">
+                                            <label for="status" asp-for="Status" class="m-b-10"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="groups" role="tabpanel">
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                            <label class="form-control-label">Group <span class="required">*</span></label>
+                                            <select id="group" class="form-control" asp-items="@ViewBag.groups" required></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 table-responsive">
+                                        <table class="table table-sm table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Group</th>
+                                                    <th>Remove</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="items">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <a id="add-group" class="btn btn-primary waves-effect waves-light">Add Group</a>
+                                    <hr />
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        @if (ViewBag.hasEditRight)
+                        {
+                            <a id="save" class="btn btn-primary waves-effect waves-light">Save</a>
+                        }
+                        <a class="btn btn-default waves-effect" asp-action="ListUsers" role="button">Back</a>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript">
+        let userGroups = new Array();
+        $(function () {
+            let userDetail = @Html.Raw(Json.Serialize(Model));
+            userGroups = userDetail.assignedGroups;
+            populateGroupTable();
+
+            let notificationType = "danger"; // success
+            $('#add-group').on('click', function () {
+                let group = $("#group").val();
+                if (!group) {
+                    notify('Kindly select the group', notificationType);
+                    return
+                }
+                var details = userGroups.filter(p => p.group === group);
+                if (details[0]) {
+                    notify('Sorry, Group already exist', notificationType);
+                    return
+                }
+
+                userGroups.push({
+                    group: group
+                });
+
+                populateGroupTable();
+            });
+
+            $('#save').on('click', function () {
+                let accesslevel = $('#general').is(':checked') ? 1 : 2;
+                var id = $("#id").val();
+                debugger
+                let user = {
+                    id: $("#id").val(),
+                    userID: $("#userID").val(),
+                    names: $("#names").val(),
+                    password: $("#password").val(),
+                    confirmPassword: $("#confirmPassword").val(),
+                    email: $("#email").val(),
+                    phone: $("#phone").val(),
+                    site: $("#user-site").val(),
+                    status: $('#status').is(':checked'),
+                    accessLevel: accesslevel,
+                    assignedGroups: userGroups,
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: "editUser",
+                    contentType: 'application/json',
+                    data: JSON.stringify(user),
+                    success: function (response) {
+                        $("#userID").val('');
+                    },
+                    failure: function (response) {
+                    }
+                }).then(function () {
+                    // ...
+                });
+            });
+        });
+
+        function removeItem(item) {
+            item = item ? item : {};
+            var index = userGroups.findIndex(p => p.group === item.group);
+            userGroups.splice(index, 1);
+            populateGroupTable();
+        }
+
+        function populateGroupTable() {
+            let mappedGroups = userGroups.map(s => {
+                // let transDate = new Date(s.date).toLocaleDateString();
+
+                return "<tr>" +
+                    "<td>" + s.group + "</td>" +
+                    "<td><a class='btn-danger btn-sm' onclick='removeItem(" + JSON.stringify(s) + ")'>Remove</a></td>" +
+                    "</tr>";
+            });
+
+            var strMappedGroups = mappedGroups.join('');
+            $('#items').html(strMappedGroups);
+        }
+
+    </script>
+}

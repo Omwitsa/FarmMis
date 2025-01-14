@@ -1,0 +1,46 @@
+﻿<aside class="main-sidebar hidden-print ">
+    <section class="sidebar" id="sidebar-scroll">
+        <ul class="sidebar-menu">
+            <li class="active treeview">
+                <a class="waves-effect waves-dark" asp-controller="Home" asp-action="Index">
+                    <i class="icon-speedometer"></i><span> Dashboard</span>
+                </a>
+            </li>
+
+            @foreach (var mainMenu in ViewBag.menus)
+            {
+                <li class="treeview">
+                    <a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>@mainMenu.MainMenu.Name</span><i class="icon-arrow-down"></i></a>
+                    <ul class="treeview-menu">
+                        @foreach (var menuLevel2 in mainMenu.MenuLevel2)
+                        {
+                            if (!menuLevel2.MenuLevel2.HasChild)
+                            {
+                                <li>
+                                    <a class="waves-effect waves-dark" asp-controller="@menuLevel2.MenuLevel2.Controller" asp-action="@menuLevel2.MenuLevel2.Action"><i class="icon-arrow-right"></i> @menuLevel2.MenuLevel2.Name </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="treeview">
+                                    <a class="waves-effect waves-dark" href="#!"><i class="icon-arrow-right"></i><span>@menuLevel2.MenuLevel2.Name</span><i class="icon-arrow-down"></i></a>
+                                    <ul class="treeview-menu">
+                                        @foreach (var menuLevel3 in menuLevel2.MenuLevel3)
+                                        {
+                                            <li>
+                                                <a class="waves-effect waves-dark" asp-controller="@menuLevel3.Controller" asp-action="@menuLevel3.Action">
+                                                    <i class="icon-arrow-right"></i>
+                                                    @menuLevel3.Name
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    </section>
+</aside>

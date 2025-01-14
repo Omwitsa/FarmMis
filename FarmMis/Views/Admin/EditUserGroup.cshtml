@@ -1,0 +1,286 @@
+﻿@model AAAErp.ViewModel.UsergroupVm
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="main-header">
+        </div>
+    </div>
+
+    <div class="row">
+        <!--Basic Form starts-->
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-header-text">User Group</h5>
+                </div>
+
+                <div class="card-block">
+                    <form asp-action="EditUserGroup">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" id="id" asp-for="Id" />
+                        <ul class="nav nav-tabs md-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#header" role="tab">Header</a>
+                                <div class="slide"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#privileges" role="tab">Privileges</a>
+                                <div class="slide"></div>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="header" role="tabpanel">
+                                <div class="row">
+                                    <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                                        <label class="form-control-label">Group <span class="required">*</span></label>
+                                        <input asp-for="Name" id="name" class="form-control" type="text" required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="checkbox checkbox-primary">
+                                        <div class="col-sm-12">
+                                            <input type="checkbox" asp-for="Closed" id="closed">
+                                            <label for="closed" class="m-b-10">Closed</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="privileges" role="tabpanel">
+                                <div class="row">
+                                    <label class="form-check form-check-inline access-header">Hidden</label>
+                                    <label class="form-check form-check-inline access-header">Visible</label>
+                                    <label class="form-check form-check-inline access-header">Full Access</label>
+                                </div>
+                                <div class="row">
+                                    @foreach (var item in Model.Menus)
+                                    {
+                                        var hidden = item.MainMenu.Code + "-D";
+                                        var read = item.MainMenu.Code + "-R";
+                                        var write = item.MainMenu.Code + "-W";
+                                        <div class="col-xs-12 col-sm-6 col-lg-3">
+                                            <div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input parent-menu" data-accessibility="hidden" data-parentCode="@hidden" type="radio" name="@item.MainMenu.Code" id="inlineRadio1" value="@item.MainMenu.Code">
+                                                    <label class="form-check-label" for="inlineRadio1"></label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input parent-menu" data-accessibility="read" data-parentCode="@read" type="radio" name="@item.MainMenu.Code" id="inlineRadio2" value="@item.MainMenu.Code">
+                                                    <label class="form-check-label" for="inlineRadio2"></label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input parent-menu" data-accessibility="write" data-parentCode="@write" type="radio" name="@item.MainMenu.Code" id="inlineRadio3" value="@item.MainMenu.Code">
+                                                    <label class="form-check-label" for="inlineRadio3"><strong>@item.MainMenu.Name</strong></label>
+                                                </div>
+                                            </div>
+
+                                            @foreach (var level2 in item.MenuLevel2)
+                                            {
+                                                <div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input child-menu" data-accessibility="hidden" data-parentCode="@hidden" type="radio" name="@level2.MenuLevel2.Code" id="inlineRadio1" value="@level2.MenuLevel2.Code">
+                                                        <label class="form-check-label" for="inlineRadio1"></label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input child-menu" data-accessibility="read" data-parentCode="@read" type="radio" name="@level2.MenuLevel2.Code" id="inlineRadio2" value="@level2.MenuLevel2.Code">
+                                                        <label class="form-check-label" for="inlineRadio2"></label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input child-menu" data-accessibility="write" data-parentCode="@write" type="radio" name="@level2.MenuLevel2.Code" id="inlineRadio3" value="@level2.MenuLevel2.Code">
+                                                        <label class="form-check-label" for="inlineRadio3">@level2.MenuLevel2.Name</label>
+                                                    </div>
+                                                </div>
+
+                                                @foreach (var level3 in level2.MenuLevel3)
+                                                {
+                                                    <div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input child-menu" data-accessibility="hidden" data-parentCode="@hidden" type="radio" name="@level3.Code" id="inlineRadio1" value="@level3.Code">
+                                                            <label class="form-check-label" for="inlineRadio1"></label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input child-menu" data-accessibility="read" data-parentCode="@read" type="radio" name="@level3.Code" id="inlineRadio2" value="@level3.Code">
+                                                            <label class="form-check-label" for="inlineRadio2"></label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input child-menu" data-accessibility="write" data-parentCode="@write" type="radio" name="@level3.Code" id="inlineRadio3" value="@level3.Code">
+                                                            <label class="form-check-label" for="inlineRadio3">@level3.Name</label>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (ViewBag.hasEditRight)
+                        {
+                            <a id="save" class="btn btn-primary waves-effect waves-light">Save</a>
+                        }
+                        <a class="btn btn-default waves-effect" asp-action="ListUserGroups" role="button">Back</a>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript">
+        $(function () {
+            let userGroups = @Html.Raw(Json.Serialize(Model.Menus));
+            // $('input[data-accessibility="hidden"]').prop("checked", true);
+
+            userGroups.forEach(g => {
+                let parentCode = g.mainMenu.code + "-D";
+                if (g.mainMenu.accessRight === 2) {
+                    parentCode = g.mainMenu.code + "-R";
+                }
+                if (g.mainMenu.accessRight === 3) {
+                    parentCode = g.mainMenu.code + "-W";
+                }
+                // let read = g.mainMenu.code + "-R";
+                // let write = g.mainMenu.code + "-W";
+
+                // $(`.child-menu[data-parentCode="${hidden}"]`).attr("disabled", true);
+                // $(`.child-menu[data-parentCode="${read}"]`).attr("disabled", true);
+                // $(`.child-menu[data-parentCode="${write}"]`).attr("disabled", true);
+
+                // let hidden = $(`input[name="${g.mainMenu.code}"][data-accessibility="hidden"]`).is(':checked');
+                // let read = $(`input[name="${g.mainMenu.code}"][data-accessibility="read"]`).is(':checked');
+                // let write = $(`input[name="${g.mainMenu.code}"][data-accessibility="write"]`).is(':checked');
+                disableChildMenus(g.mainMenu.code, parentCode);
+                $(`input[name="${g.mainMenu.code}"][data-accessibility="hidden"]`).prop("checked", g.mainMenu.accessRight === 1);
+                $(`input[name="${g.mainMenu.code}"][data-accessibility="read"]`).prop("checked", g.mainMenu.accessRight === 2);
+                $(`input[name="${g.mainMenu.code}"][data-accessibility="write"]`).prop("checked", g.mainMenu.accessRight === 3);
+
+                g.menuLevel2.forEach(l2 => {
+                    $(`input[name="${l2.menuLevel2.code}"][data-accessibility="hidden"]`).prop("checked", l2.menuLevel2.accessRight === 1);
+                    $(`input[name="${l2.menuLevel2.code}"][data-accessibility="read"]`).prop("checked", l2.menuLevel2.accessRight === 2);
+                    $(`input[name="${l2.menuLevel2.code}"][data-accessibility="write"]`).prop("checked", l2.menuLevel2.accessRight === 3);
+
+                    l2.menuLevel3.forEach(l3 => {
+                        debugger
+                        $(`input[name="${l3.code}"][data-accessibility="hidden"]`).prop("checked", l3.accessRight === 1);
+                        $(`input[name="${l3.code}"][data-accessibility="read"]`).prop("checked", l3.accessRight === 2);
+                        $(`input[name="${l3.code}"][data-accessibility="write"]`).prop("checked", l3.accessRight === 3);
+                    });
+                });
+            });
+
+            $('.parent-menu').change(function () {
+                var parentCode = $(this).attr("data-parentCode");
+                $(`input[data-parentCode="${parentCode}"]`).prop("checked", true);
+                disableChildMenus(this.value, parentCode);
+            });
+
+            $('#save').on('click', function () {
+                let userPrivileges = new Array();
+                let name = $("#name").val();
+                let id = $("#id").val();
+
+                userGroups.forEach(g => {
+                    let hidden = $(`input[name="${g.mainMenu.code}"][data-accessibility="hidden"]`).is(':checked');
+                    let read = $(`input[name="${g.mainMenu.code}"][data-accessibility="read"]`).is(':checked');
+                    let write = $(`input[name="${g.mainMenu.code}"][data-accessibility="write"]`).is(':checked');
+
+                    let accessRights = 1;
+                    if (read) {
+                        accessRights = 2;
+                    }
+                    if (write) {
+                        accessRights = 3;
+                    }
+
+                    userPrivileges.push({ privilegeCode: g.mainMenu.code, AccessRight: accessRights });
+
+                    g.menuLevel2.forEach(l2 => {
+                        let hidden = $(`input[name="${l2.menuLevel2.code}"][data-accessibility="hidden"]`).is(':checked');
+                        let read = $(`input[name="${l2.menuLevel2.code}"][data-accessibility="read"]`).is(':checked');
+                        let write = $(`input[name="${l2.menuLevel2.code}"][data-accessibility="write"]`).is(':checked');
+
+                        let accessRights = 1;
+                        if (read) {
+                            accessRights = 2;
+                        }
+                        if (write) {
+                            accessRights = 3;
+                        }
+
+                        userPrivileges.push({ privilegeCode: l2.menuLevel2.code, AccessRight: accessRights });
+
+                        l2.menuLevel3.forEach(l3 => {
+                            let hidden = $(`input[name="${l3.code}"][data-accessibility="hidden"]`).is(':checked');
+                            let read = $(`input[name="${l3.code}"][data-accessibility="read"]`).is(':checked');
+                            let write = $(`input[name="${l3.code}"][data-accessibility="write"]`).is(':checked');
+
+                            let accessRights = 1;
+                            if (read) {
+                                accessRights = 2;
+                            }
+                            if (write) {
+                                accessRights = 3;
+                            }
+
+                            userPrivileges.push({ privilegeCode: l3.code, AccessRight: accessRights });
+                        });
+                    });
+                });
+
+                let groupDetails = {
+                    id: id,
+                    name: name,
+                    userPrivileges: userPrivileges,
+                    closed: $("#closed").is(':checked'),
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: "editUserGroup",
+                    contentType: 'application/json',
+                    data: JSON.stringify(groupDetails),
+                    success: function (response) {
+                        $("#name").val('');
+                    },
+                    failure: function (response) {
+                    }
+                }).then(function () {
+                    // ...
+                });
+            });
+
+            function disableChildMenus(menu, parentCode) {
+                let hiddenCode = menu + "-D";
+                let readCode = menu + "-R";
+                let writeCode = menu + "-W";
+
+                let hidden = parentCode === hiddenCode;
+                if (hidden) {
+                    $(`.child-menu[data-parentCode="${hiddenCode}"]`).attr("disabled", true);
+                    $(`.child-menu[data-parentCode="${readCode}"]`).attr("disabled", true);
+                    $(`.child-menu[data-parentCode="${writeCode}"]`).attr("disabled", true);
+                }
+
+                let read = parentCode === readCode;
+                if (read) {
+                    $(`.child-menu[data-parentCode="${hiddenCode}"][data-accessibility="hidden"]`).attr("disabled", false);
+                    $(`.child-menu[data-parentCode="${readCode}"][data-accessibility="read"]`).attr("disabled", false);
+                    $(`.child-menu[data-parentCode="${writeCode}"][data-accessibility="write"]`).attr("disabled", true);
+                }
+                let write = parentCode === writeCode;
+                if (write) {
+                    $(`.child-menu[data-parentCode="${hiddenCode}"]`).attr("disabled", false);
+                    $(`.child-menu[data-parentCode="${readCode}"]`).attr("disabled", false);
+                    $(`.child-menu[data-parentCode="${writeCode}"]`).attr("disabled", false);
+                }
+            }
+        });
+    </script>
+}

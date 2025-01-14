@@ -1,0 +1,64 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<partial name="../PartialView/_HtmlHeader.cshtml" />
+<body class="sidebar-mini fixed">
+    <div class="loader-bg">
+        <div class="loader-bar">
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <partial name="../PartialView/_SiteHeader.cshtml" />
+        <partial name="../PartialView/_SideNav.cshtml" />
+
+        <div class="content-wrapper">
+            @RenderBody()
+        </div>
+    </div>
+    <!-- Required Jqurey -->
+    <script src="~/files/assets/plugins/Jquery/dist/jquery.min.js"></script>
+    <script src="~/files/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/files/assets/plugins/tether/dist/js/tether.min.js"></script>
+
+    <!-- Required Fremwork -->
+    <script src="~/files/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Scrollbar JS-->
+    <script src="~/files/assets/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <script src="~/files/assets/plugins/jquery.nicescroll/jquery.nicescroll.min.js"></script>
+
+    <!--classic JS-->
+    <script src="~/files/assets/plugins/classie/classie.js"></script>
+
+    <!-- notification -->
+    <script src="~/files/assets/plugins/notification/js/bootstrap-growl.min.js"></script>
+
+    <!-- Sparkline charts -->
+    <script src="~/files/assets/plugins/jquery-sparkline/dist/jquery.sparkline.js"></script>
+
+    <!-- Counter js  -->
+    <script src="~/files/assets/plugins/waypoints/jquery.waypoints.min.js"></script>
+    <script src="~/files/assets/plugins/countdown/js/jquery.counterup.js"></script>
+
+    <!-- Echart js -->
+    <script src="~/files/assets/plugins/charts/echarts/js/echarts-all.js"></script>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+
+    <!-- custom js -->
+    <script type="text/javascript" src="~/files/assets/js/main.min.js"></script>
+    <script type="text/javascript" src="~/files/assets/pages/dashboard.js"></script>
+    <script type="text/javascript" src="~/files/assets/pages/elements.js"></script>
+    <script src="~/files/assets/js/menu.min.js"></script>
+    <script src="~/js/custom.js"></script>
+    @*  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script> *@
+
+    @await Component.InvokeAsync("Notyf")
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

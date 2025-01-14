@@ -1,0 +1,179 @@
+﻿@using AAAErp.Utilities;
+@using AAAErp.ViewModel;
+@model AAAErp.ViewModel.UsergroupListFormVm;
+@{
+    var count = 0;
+    Pager pager = new Pager();
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+    }
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="main-header">
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Hover effect table starts -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-header-text">Usergroups</h5>
+                <div class="f-right">
+                    @if (ViewBag.hasEditRight)
+                    {
+                        <a class="btn btn-primary waves-effect waves-light" asp-action="NewUserGroup" role="button">New</a>
+                    }
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th> No. </th>
+                                    <th> Usergroup </th>
+                                    <th> Closed </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.List)
+                                {
+                                    ++count;
+                                    <tr>
+                                        <td>
+                                            @count
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Closed)
+                                        </td>
+                                        
+                                        <td>
+                                            @if (ViewBag.hasEditRight)
+                                            {
+                                                <a asp-action="EditUserGroup" asp-route-id="@item.Id">Edit</a>
+                                                @*  <a asp-action="SiteDetails" asp-route-id="@item.Id">Details</a> |
+                                        <a asp-action="DeleteSite" asp-route-id="@item.Id">Delete</a> *@
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="well well-sm">
+                            <form asp-action="ListUserGroups">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <label class="form-control-label">Usergroup</label>
+                                        <input name="Name" class="form-control" type="text">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="checkbox checkbox-primary">
+                                        <div class="col-sm-12">
+                                            <input id="inActive" type="checkbox" name="inActive" value="true">
+                                            <label for="inActive" class="m-b-10">Include Inactive</label>
+                                        </div>
+                                    </div>
+                                </div><br />
+
+                                <button type="submit" class="btn btn-primary waves-effect waves-light">Search</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="well well-sm">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <a href="@Url.Action("PdfUserGroups", Model.Filter)"
+                                       class="btn btn-default waves-effect" target="_blank">Export PDF</a>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6">
+                                    <a href="@Url.Action("ExcelUserGroups", Model.Filter)"
+                                       class="btn btn-default waves-effect" target="_blank">Export Excel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    @if (pager.TotalPages > 1)
+                    {
+                        <ul class="pagination pagination-sm justify-content-end">
+
+                            @if (pager.StartPage > 1)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action("ListUserGroups", Model.Filter)" aria-label="First" class="page-link">
+                                        <span aria-hidden="true">First</span>
+                                    </a>
+                                </li>
+                            }
+
+                            @if (pager.CurrentPage > 1)
+                            {
+                                Model.Filter.Page = pager.CurrentPage - 1;
+                                <li class="page-item">
+                                    <a href="@Url.Action("ListUserGroups", Model.Filter)" aria-label="Previous" class="page-link">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            }
+
+                            @for (int i = pager.StartPage; i <= pager.EndPage; i++)
+                            {
+                                Model.Filter.Page = i;
+                                <li class="page-item @((pager.CurrentPage == i) ? "active" : null)">
+                                    @if (i == 1)
+                                    {
+                                        @Html.ActionLink("First", "ListUserGroups", Model.Filter, new { @class = "page-link" })
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink(i.ToString(), "ListUserGroups", Model.Filter, new { @class = "page-link" })
+                                    }
+
+                                </li>
+                            }
+
+                            @if (pager.CurrentPage < pager.TotalPages)
+                            {
+                                Model.Filter.Page = pager.CurrentPage + 1;
+                                <li class="page-item">
+                                    <a href="@Url.Action("ListUserGroups", Model.Filter)" aria-label="Next" class="page-link">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            }
+
+                            @if (pager.EndPage < pager.TotalPages)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action("ListUserGroups", Model.Filter)" aria-label="Last" class="page-link">
+                                        <span aria-hidden="true">Last</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
