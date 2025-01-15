@@ -1,4 +1,4 @@
-﻿namespace AAAErp.ViewModel
+﻿namespace FarmMis.ViewModel
 {
     public class BaseFilterVm
     {

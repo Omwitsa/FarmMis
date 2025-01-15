@@ -1,4 +1,4 @@
-﻿namespace AAAErp.Constants
+﻿namespace FarmMis.Constants
 {
     public class Values
     {

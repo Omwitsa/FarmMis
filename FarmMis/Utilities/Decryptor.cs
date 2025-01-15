@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace AAAErp.Utilities
+namespace FarmMis.Utilities
 {
     public class Decryptor
     {

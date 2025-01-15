@@ -1,7 +1,7 @@
-﻿using AAAErp.ViewModel;
-using static AAAErp.Constants.Values;
+﻿using FarmMis.ViewModel;
+using static FarmMis.Constants.Values;
 
-namespace AAAErp.IProvider
+namespace FarmMis.IProvider
 {
     public interface IEmailProvider
     {

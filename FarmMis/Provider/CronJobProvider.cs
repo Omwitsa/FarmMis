@@ -1,10 +1,10 @@
-﻿using AAAErp.Controllers;
-using AAAErp.IProvider;
-using AAAErp.Models;
-using AAAErp.Utilities;
-using AAAErp.ViewModel;
+﻿using FarmMis.Controllers;
+using FarmMis.IProvider;
+using FarmMis.Models;
+using FarmMis.Utilities;
+using FarmMis.ViewModel;
 
-namespace AAAErp.Provider
+namespace FarmMis.Provider
 {
     public class CronJobProvider : ICronJobProvider
     {

@@ -1,12 +1,12 @@
-﻿using AAAErp.Controllers;
-using AAAErp.IProvider;
-using AAAErp.ViewModel;
+﻿using FarmMis.Controllers;
+using FarmMis.IProvider;
+using FarmMis.ViewModel;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
-using static AAAErp.Constants.Values;
+using static FarmMis.Constants.Values;
 
-namespace AAAErp.Provider
+namespace FarmMis.Provider
 {
     public class EmailProvider : IEmailProvider
     {

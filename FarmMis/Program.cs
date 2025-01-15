@@ -1,9 +1,9 @@
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
-using AAAErp.IProvider;
-using AAAErp.Models;
-using AAAErp.Provider;
-using AAAErp.Utilities;
+using FarmMis.IProvider;
+using FarmMis.Models;
+using FarmMis.Provider;
+using FarmMis.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Rotativa.AspNetCore;
@@ -22,6 +22,7 @@ builder.Services.AddHangfireServer();
 
 builder.Services.AddScoped<ICronJobProvider, CronJobProvider>();
 builder.Services.AddTransient<IEmailProvider, EmailProvider>();
+builder.Services.AddTransient<IPortalProxy, PortalProxy>();
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 10;

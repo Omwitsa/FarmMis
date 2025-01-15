@@ -1,10 +1,10 @@
-﻿using AAAErp.Constants;
-using AAAErp.Models;
-using AAAErp.ViewModel;
+﻿using FarmMis.Constants;
+using FarmMis.Models;
+using FarmMis.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace AAAErp.Utilities
+namespace FarmMis.Utilities
 {
     public class DatabaseUpdator
     {

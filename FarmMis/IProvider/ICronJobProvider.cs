@@ -1,5 +1,5 @@
 ﻿
-namespace AAAErp.IProvider
+namespace FarmMis.IProvider
 {
     public interface ICronJobProvider
     {

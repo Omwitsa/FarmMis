@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AAAErp.Models
+namespace FarmMis.Models
 {
     public class User
     {

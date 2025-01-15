@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AAAErp.Models
+namespace FarmMis.Models
 {
     public class AssignedGroup
     {

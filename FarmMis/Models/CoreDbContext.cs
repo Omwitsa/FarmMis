@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace AAAErp.Models
+namespace FarmMis.Models
 {
     public partial class CoreDbContext : DbContext
     {
@@ -18,5 +18,10 @@ namespace AAAErp.Models
         public virtual DbSet<UserGroup> UserGroups { get; set; }
         public virtual DbSet<UserPrivilege> UserPrivileges { get; set; }
         public virtual DbSet<AssignedGroup> AssignedGroups { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Branch> Branches { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Packlist> Packlists { get; set; }
+        public virtual DbSet<PacklistLine> PacklistLines { get; set; }
     }
 }

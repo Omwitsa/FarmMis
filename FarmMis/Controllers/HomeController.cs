@@ -1,18 +1,18 @@
-﻿using AAAErp.Constants;
-using AAAErp.Models;
+﻿using FarmMis.Constants;
+using FarmMis.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
-using AAAErp.ViewModel;
-using AAAErp.Utilities;
+using FarmMis.ViewModel;
+using FarmMis.Utilities;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using AAAErp.IProvider;
+using FarmMis.IProvider;
 
-namespace AAAErp.Controllers
+namespace FarmMis.Controllers
 {
     public class HomeController : Controller
     {

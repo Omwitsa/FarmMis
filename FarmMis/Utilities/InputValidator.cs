@@ -1,7 +1,7 @@
-﻿using AAAErp.ViewModel;
+﻿using FarmMis.ViewModel;
 using System.Text.RegularExpressions;
 
-namespace AAAErp.Utilities
+namespace FarmMis.Utilities
 {
 	public class InputValidator
 	{

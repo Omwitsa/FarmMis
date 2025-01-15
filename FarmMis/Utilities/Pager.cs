@@ -1,4 +1,4 @@
-﻿namespace AAAErp.Utilities
+﻿namespace FarmMis.Utilities
 {
     public class Pager
     {

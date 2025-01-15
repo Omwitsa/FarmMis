@@ -1,6 +1,6 @@
-﻿using AAAErp.ViewModel;
+﻿using FarmMis.ViewModel;
 
-namespace AAAErp.Constants
+namespace FarmMis.Constants
 {
     public class StrValues
     {

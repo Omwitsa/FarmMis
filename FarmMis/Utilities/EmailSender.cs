@@ -1,12 +1,12 @@
-﻿using AAAErp.Constants;
-using AAAErp.IProvider;
-using AAAErp.Models;
-using AAAErp.Provider;
-using AAAErp.ViewModel;
+﻿using FarmMis.Constants;
+using FarmMis.IProvider;
+using FarmMis.Models;
+using FarmMis.Provider;
+using FarmMis.ViewModel;
 using System.Net.Mail;
-using static AAAErp.Constants.Values;
+using static FarmMis.Constants.Values;
 
-namespace AAAErp.Utilities
+namespace FarmMis.Utilities
 {
     public class EmailSender
     {

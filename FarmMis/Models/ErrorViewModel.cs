@@ -1,4 +1,4 @@
-namespace AAAErp.Models
+namespace FarmMis.Models
 {
     public class ErrorViewModel
     {

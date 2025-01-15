@@ -1,8 +1,8 @@
-﻿using AAAErp.Models;
-using AAAErp.ViewModel;
+﻿using FarmMis.Models;
+using FarmMis.ViewModel;
 using NuGet.Protocol.Plugins;
 
-namespace AAAErp.Utilities
+namespace FarmMis.Utilities
 {
     public class MailGenerator
     {

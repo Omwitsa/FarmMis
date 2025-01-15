@@ -1,17 +1,17 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using ClosedXML.Excel;
-using AAAErp.Constants;
-using AAAErp.IProvider;
-using AAAErp.Models;
-using AAAErp.Utilities;
-using AAAErp.ViewModel;
+using FarmMis.Constants;
+using FarmMis.IProvider;
+using FarmMis.Models;
+using FarmMis.Utilities;
+using FarmMis.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Rotativa.AspNetCore;
 
-namespace AAAErp.Controllers
+namespace FarmMis.Controllers
 {
     public class AdminController : Controller
     {
@@ -34,18 +34,22 @@ namespace AAAErp.Controllers
         {
             var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
             menuBuilder.BuildMenus(this, userId, "System Setup");
+            string[] farms = new string[] { "Chestnut", "Thika", "Simba" };
+            ViewBag.farms = new SelectList(farms);
             var setting = _context.SysSetup.FirstOrDefault();
             return View(setting);
         }
 
         [Authorize(Roles = "System Setup")]
         [HttpPost]
-        public IActionResult SysSetup([Bind("Name,Initials,Address,LogoImageUrl,ThemeColor,SecondaryColor,SmtpServer,SmtpUserName,SmtpPassword,SmtpPort,SocketOption")] SysSetup setting)
+        public IActionResult SysSetup([Bind("Name,Initials,Address,LogoImageUrl,ThemeColor,SecondaryColor,SmtpServer,SmtpUserName,SmtpPassword,SmtpPort,SocketOption,Farm")] SysSetup setting)
         {
             try
             {
                 var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
                 menuBuilder.BuildMenus(this, userId, "System Setup");
+                string[] farms = new string[] { "Chestnut", "Thika", "Simba" };
+                ViewBag.farms = new SelectList(farms);
 
                 if (string.IsNullOrEmpty(setting.Name))
                 {
@@ -65,6 +69,7 @@ namespace AAAErp.Controllers
                 portalSetting.SmtpPassword = string.IsNullOrEmpty(setting.SmtpPassword) ? portalSetting.SmtpPassword : Decryptor.Encrypt(setting.SmtpPassword);
                 portalSetting.SmtpPort = setting.SmtpPort;
                 portalSetting.SocketOption = setting.SocketOption;
+                portalSetting.Farm = setting.Farm;
                
                 _context.SaveChanges();
                 _notyf.Success("System Setup updated successfully");

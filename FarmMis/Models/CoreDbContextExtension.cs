@@ -1,7 +1,7 @@
-﻿using AAAErp.Constants;
-using AAAErp.Utilities;
+﻿using FarmMis.Constants;
+using FarmMis.Utilities;
 
-namespace AAAErp.Models
+namespace FarmMis.Models
 {
     public static class CoreDbContextExtension
     {

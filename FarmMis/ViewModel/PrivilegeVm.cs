@@ -1,6 +1,6 @@
-﻿using AAAErp.Models;
+﻿using FarmMis.Models;
 
-namespace AAAErp.ViewModel
+namespace FarmMis.ViewModel
 {
     public class PrivilegeVm
     {

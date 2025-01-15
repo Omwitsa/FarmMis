@@ -1,12 +1,17 @@
-﻿using AAAErp.Constants;
-using AAAErp.Controllers;
-using AAAErp.IProvider;
-using AAAErp.Models;
-using AAAErp.Utilities;
-using AAAErp.ViewModel;
+﻿using FarmMis.Constants;
+using FarmMis.Controllers;
+using FarmMis.IProvider;
+using FarmMis.Models;
+using FarmMis.Utilities;
+using FarmMis.ViewModel;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Google.Protobuf.WellKnownTypes;
+using Newtonsoft.Json;
+using Microsoft.ReportingServices.Interfaces;
 
 namespace FarmMis.Controllers
 {
@@ -16,13 +21,15 @@ namespace FarmMis.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly INotyfService _notyf;
         private readonly CoreDbContext _context;
+        private readonly IPortalProxy _portalProxy;
         private MenuBuilder menuBuilder;
-        public PackhouseController(CoreDbContext context, INotyfService notyf, ILogger<HomeController> logger)
+        public PackhouseController(CoreDbContext context, INotyfService notyf, ILogger<HomeController> logger, IPortalProxy portalProxy)
         {
             _notyf = notyf;
             _context = context;
             _logger = logger;
             menuBuilder = new MenuBuilder(context);
+            _portalProxy = portalProxy;
         }
 
         [Authorize(Roles = "Packlist")]
@@ -30,22 +37,38 @@ namespace FarmMis.Controllers
         {
             filter.Page = filter?.Page ?? 1;
             var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
-            menuBuilder.BuildMenus(this, userId, "Users");
+            menuBuilder.BuildMenus(this, userId, "Packlist");
 
-            //filter.Page = filter.Page < 1 ? 1 : filter.Page;
-            //var users = await GetUsers(filter);
-            //int totalItems = users.Count();
-            //var pager = new Pager(totalItems, filter.Page, StrValues.PageSize);
-            //int skip = (filter.Page - 1) * StrValues.PageSize;
-            //var data = users.Skip(skip).Take(pager.PageSize).ToList();
+            var customers = await _context.Customers.Select(s => s.Name).ToListAsync();
+            ViewBag.customers = new SelectList(customers);
 
-            //ViewBag.Pager = pager;
-            //return View(new UserListFormVm
-            //{
-            //    List = data,
-            //    Filter = filter
-            //});
+            return View(new PacklistVm
+            {
+                Date = DateTime.Now,
+            });
+        }
 
+        [Authorize(Roles = "Packlist")]
+        [HttpPost]
+        public IActionResult Packlist([Bind("Date")] PacklistVm packlist)
+        {
+            
+            var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
+            menuBuilder.BuildMenus(this, userId, "Packlist");
+
+            var setup = _context.SysSetup.FirstOrDefault();
+            if (setup == null)
+            {
+                _notyf.Error("Sorry, System settings not found");
+                return View(packlist);
+            }
+            setup.Farm = setup?.Farm ?? "";
+            string date = packlist.Date.ToString("yyyyMMddHHmmss");
+            var packlistResults = _portalProxy.GetPackList(setup.Farm, date).Result;
+            var packlistobj = JsonConvert.DeserializeObject<dynamic>(packlistResults);
+
+            var val = packlistobj.clients;
+            //ViewBag.appliedLeaves = jdata.Data.applications;
             return View();
         }
     }
