@@ -1,5 +1,4 @@
 ﻿using FarmMis.Constants;
-using FarmMis.Controllers;
 using FarmMis.IProvider;
 using FarmMis.Models;
 using FarmMis.Utilities;
@@ -9,9 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Google.Protobuf.WellKnownTypes;
 using Newtonsoft.Json;
-using Microsoft.ReportingServices.Interfaces;
 
 namespace FarmMis.Controllers
 {
@@ -33,9 +30,8 @@ namespace FarmMis.Controllers
         }
 
         [Authorize(Roles = "Packlist")]
-        public async Task<IActionResult> Packlist(FilterUsersVm? filter)
+        public async Task<IActionResult> Packlist()
         {
-            filter.Page = filter?.Page ?? 1;
             var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
             menuBuilder.BuildMenus(this, userId, "Packlist");
 
@@ -148,18 +144,16 @@ namespace FarmMis.Controllers
                             int lineId = line.lineid;
                             var packlistLine = savedPacklist.PacklistLines.FirstOrDefault(l => l.VegLineId == lineId);
                             if (packlistLine != null)
-                            {
                                 packlistLine.Barcode = line.barcode;
-                            }
                         }
                     }
                 }
 
                 await _context.SaveChangesAsync();
                 _notyf.Success("Synched successfully");
-                return View(packlist);
+                return RedirectToAction("Packlist");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _notyf.Error("Sorry, An error occurred");
                 return View(packlist);

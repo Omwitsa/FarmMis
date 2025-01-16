@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FarmMis.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigarton : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,7 +22,7 @@ namespace FarmMis.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     VegId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Name = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CustomerId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -39,9 +39,9 @@ namespace FarmMis.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     VegId = table.Column<int>(type: "int", nullable: true),
-                    Code = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
+                    Code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Name = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -59,10 +59,10 @@ namespace FarmMis.Migrations
                     VegHeaderId = table.Column<int>(type: "int", nullable: true),
                     DispatchDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CustomerId = table.Column<int>(type: "int", nullable: true),
-                    CustomerName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    CustomerName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BranchId = table.Column<int>(type: "int", nullable: true),
-                    BranchName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    BranchName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -78,13 +78,13 @@ namespace FarmMis.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     VegId = table.Column<int>(type: "int", nullable: true),
-                    Code = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
+                    Code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Name = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Type = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Type = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Category = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Category = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
