@@ -216,7 +216,17 @@ namespace FarmMis.Controllers
                     _notyf.Error($"Sorry, {customer.Name} {branch.Name} branch didn't order the product on {customerProduct.Date}");
                     return Json("");
                 }
+
                 var product = await _context.Products.FirstOrDefaultAsync(p => p.VegId == line.ProductId);
+                ++line.ScanQty;
+
+                if(line.ScanQty > line.BoxQty)
+                {
+                    _notyf.Error($"Sorry, Already scanned {line.BoxQty} items which are needed");
+                    return Json("");
+                }
+
+                await _context.SaveChangesAsync();
 
                 return Json(new
                 {

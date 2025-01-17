@@ -36,18 +36,18 @@
                         <div class="row">
                             <div class="form-group col-xs-12 col-sm-6 col-lg-6">
                                 <label class="form-control-label">Product</label>
-                                <input class="form-control" type="text" readonly>
+                                <input class="form-control" id="product" type="text" readonly>
                             </div>
                             <div class="form-group col-xs-12 col-sm-6 col-lg-3">
                                 <label class="form-control-label">Box Qty</label>
-                                <input class="form-control" type="text" readonly>
+                                <input class="form-control" id="box_qty" type="text" readonly>
                             </div>
                             <div class="form-group col-xs-12 col-sm-6 col-lg-3">
                                 <label class="form-control-label">Scan Qty</label>
-                                <input class="form-control" type="text" readonly>
+                                <input class="form-control" id="scan_qty" type="text" readonly>
                             </div>
                         </div><hr />
-
+                        
                         <div class="row">
                             <div class="form-group col-xs-12 col-sm-6 col-lg-4">
                                 <label class="form-control-label">Customer</label>
@@ -169,7 +169,13 @@
                         contentType: 'application/json',
                         data: JSON.stringify(client),
                         success: function (response) {
+                            response.line = response.line ? response.line : {};
+                            response.product = response.product ? response.product : {};
                             $("#barcode").val('');
+                            $("#product").val(response.product.name);
+                            $("#box_qty").val(response.line.boxQty);
+                            $("#scan_qty").val(response.line.scanQty);
+                            getOrderedProducts();
                         },
                         failure: function (response) {
                             $("#barcode").val('');
