@@ -189,6 +189,7 @@ namespace FarmMis.Migrations
                     VegHeaderId = table.Column<int>(type: "int", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: true),
                     BoxQty = table.Column<int>(type: "int", nullable: true),
+                    ScanQty = table.Column<int>(type: "int", nullable: false),
                     Barcode = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },

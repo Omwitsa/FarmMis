@@ -10,6 +10,7 @@ namespace FarmMis.Models
         public int? VegHeaderId { get; set; }
         public int? ProductId { get; set; }
         public int? BoxQty { get; set; }
+        public int ScanQty { get; set; } = 0;
         [StringLength(50)]
         public string? Barcode { get; set; }
     }

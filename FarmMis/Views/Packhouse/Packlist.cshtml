@@ -21,7 +21,7 @@
                                 <label>Date:</label>
                             </div>
                             <div class="col-xs-12 col-sm-3">
-                                <input asp-for="Date" id="date" class="form-control" type="date">
+                                <input asp-for="Date" id="dispach_date" class="form-control" type="date">
                             </div>
                             <div class="col-xs-12 col-sm-2">
                                 <button type="submit" class="btn btn-primary waves-effect waves-light">Synch</button>
@@ -77,6 +77,28 @@
                     </form>
                 </div>
 
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-sm-12 table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th> Product </th>
+                                        <th> Box Quantity </th>
+                                        <th> Scanned Quantity </th>
+                                        <th> Barcode</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="packlist">
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -88,8 +110,18 @@
     }
     <script type="text/javascript">
         $(function () {
+            let orderedProducts = new Array();
             $('#barcode').val('');
             $('#customer_branch').prop('disabled', true);
+            getOrderedProducts();
+            $('#dispach_date').on('change', function () {
+                getOrderedProducts();
+            });
+
+            $('#customer_branch').on('change', function () {
+                getOrderedProducts();
+            });
+
             $('#customers').on('change', function () {
                 $('#barcode').focus();
                 $('#customer_branch').empty();
@@ -112,13 +144,17 @@
                 });
             });
 
+            $('#customers').on('change', function () {
+                getOrderedProducts();
+            });
+
             $('#barcode').on('keyup', function (event) {
                 if (event.which === 13) {
                     let client = {
                         barcode: this.value,
                         clientId: $("#customers").val(),
                         branchId: $("#customer_branch").val(),
-                        date: $("#date").val(),
+                        date: $("#dispach_date").val(),
                     };
 
                     if (!client.clientId) {
@@ -143,6 +179,47 @@
                     });
                 }
             });
+
+            function getOrderedProducts() {
+                let client = {
+                    clientId: $("#customers").val() ? $("#customers").val() : null,
+                    branchId: $("#customer_branch").val(),
+                    date: $("#dispach_date").val(),
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: "getOrderedProducts",
+                    contentType: 'application/json',
+                    data: JSON.stringify(client),
+                    success: function (response) {
+                        orderedProducts = response.orderedProducts ? response.orderedProducts : [];
+                        $("#barcode").val('');
+                        populateOrdersTable();
+                    },
+                    failure: function (response) {
+                        $("#barcode").val('');
+                    }
+                }).then(function () {
+                    // ...
+                });
+            }
+
+            function populateOrdersTable() {
+                let itemTableRows = new Array();
+                let count = 0;
+                orderedProducts.forEach(j => {
+                    count++;
+                    itemTableRows.push(`<tr>
+                                            <td>${count}</td>
+                                            <td>${j.product}</td>
+                                            <td>${j.boxQty}</td>
+                                            <td>${j.scanQty}</td>
+                                            <td>${j.barcode}</td>
+                                        </tr>`);
+                });
+
+                $('#packlist').html(itemTableRows);
+            }
         });
     </script>
 }

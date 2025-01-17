@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FarmMis.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20250116112305_Initial-Migration")]
+    [Migration("20250117113304_Initial-Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -133,6 +133,9 @@ namespace FarmMis.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScanQty")
                         .HasColumnType("int");
 
                     b.Property<int?>("VegHeaderId")

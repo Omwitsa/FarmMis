@@ -132,6 +132,9 @@ namespace FarmMis.Migrations
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ScanQty")
+                        .HasColumnType("int");
+
                     b.Property<int?>("VegHeaderId")
                         .HasColumnType("int");
 

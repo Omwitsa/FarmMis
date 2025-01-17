@@ -167,13 +167,13 @@ namespace FarmMis.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetCustomerBranches(int customerId)
+        public async Task<JsonResult> GetCustomerBranches(int customerId)
         {
             try
             {
-                var branches = _context.Branches.Where(b => b.CustomerId == customerId).ToList();
+                var branches = await _context.Branches.Where(b => b.CustomerId == customerId).ToListAsync();
                 if(!branches.Any())
-                    branches = _context.Branches.Where(b => b.VegId == 0).ToList();
+                    branches = await _context.Branches.Where(b => b.VegId == 0).ToListAsync();
                 return Json(branches);
             }
             catch (Exception)
@@ -184,24 +184,24 @@ namespace FarmMis.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetCustomerProduct([FromBody] CustomerProduct customerProduct)
+        public async Task<JsonResult> GetCustomerProduct([FromBody] CustomerProduct customerProduct)
         {
             try
             {
-                var customer = _context.Customers.FirstOrDefault(p => p.VegId == customerProduct.ClientId);
+                var customer = await _context.Customers.FirstOrDefaultAsync(p => p.VegId == customerProduct.ClientId);
                 if (customer == null)
                 {
                     _notyf.Error("Sorry, Customer not found");
                     return Json("");
                 }
-                var branch = _context.Branches.FirstOrDefault(p => p.VegId == customerProduct.BranchId);
+                var branch = await _context.Branches.FirstOrDefaultAsync(p => p.VegId == customerProduct.BranchId);
                 if (branch == null)
                 {
                     _notyf.Error("Sorry, Customer branch not found");
                     return Json("");
                 }
 
-                var packlist = _context.Packlists.Include(p => p.PacklistLines).FirstOrDefault(p => p.DispatchDate == customerProduct.Date 
+                var packlist = await _context.Packlists.Include(p => p.PacklistLines).FirstOrDefaultAsync(p => p.DispatchDate == customerProduct.Date 
                 && p.CustomerId == customerProduct.ClientId && p.BranchId == customerProduct.BranchId);
 
                 if(packlist == null)
@@ -216,7 +216,7 @@ namespace FarmMis.Controllers
                     _notyf.Error($"Sorry, {customer.Name} {branch.Name} branch didn't order the product on {customerProduct.Date}");
                     return Json("");
                 }
-                var product = _context.Products.FirstOrDefault(p => p.VegId == line.ProductId);
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.VegId == line.ProductId);
 
                 return Json(new
                 {
@@ -230,5 +230,52 @@ namespace FarmMis.Controllers
                 return Json("");
             }
         }
+
+        [HttpPost]
+        public async Task<JsonResult> GetOrderedProducts([FromBody] CustomerProduct customerProduct)
+        {
+            try
+            {
+                if(customerProduct == null)
+                    customerProduct = new CustomerProduct();
+
+                var packlists = await _context.Packlists.Include(p => p.PacklistLines).Where(p => p.DispatchDate == customerProduct.Date).ToListAsync();
+                if (customerProduct.ClientId != null)
+                    packlists = packlists.Where(p => p.CustomerId == customerProduct.ClientId).ToList();
+                if (customerProduct.BranchId != null)
+                    packlists = packlists.Where(p => p.BranchId == customerProduct.BranchId).ToList();
+
+                if(customerProduct.ClientId == null || customerProduct.BranchId == null)
+                    packlists = packlists.Take(5).ToList();
+
+                var products = await _context.Products.ToListAsync();
+                var orderedProducts = new List<dynamic>();
+                foreach (var pack in packlists)
+                {
+                    foreach (var line in pack.PacklistLines)
+                    {
+                        var product = products.FirstOrDefault(p => p.VegId == line.ProductId);
+                        orderedProducts.Add(new
+                        {
+                            product = product.Name,
+                            boxQty = line.BoxQty,
+                            scanQty = line.ScanQty,
+                            barcode = line.Barcode,
+                        });
+                    }
+                }
+
+                return Json(new
+                {
+                    orderedProducts
+                });
+            }
+            catch (Exception)
+            {
+                _notyf.Error("Sorry, An error occurred");
+                return Json("");
+            }
+        }
+
     }
 }
