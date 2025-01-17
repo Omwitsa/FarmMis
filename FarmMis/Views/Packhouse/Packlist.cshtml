@@ -21,10 +21,9 @@
                                 <label>Date:</label>
                             </div>
                             <div class="col-xs-12 col-sm-3">
-                                <input asp-for="Date" class="form-control" type="date">
+                                <input asp-for="Date" id="date" class="form-control" type="date">
                             </div>
                             <div class="col-xs-12 col-sm-2">
-                                @* <a class="btn btn-primary waves-effect waves-light" asp-action="Synch" role="button">Synch</a> *@
                                 <button type="submit" class="btn btn-primary waves-effect waves-light">Synch</button>
                             </div>
                         </div>
@@ -52,18 +51,21 @@
                         <div class="row">
                             <div class="form-group col-xs-12 col-sm-6 col-lg-4">
                                 <label class="form-control-label">Customer</label>
-                                <select class="form-control" asp-items="@ViewBag.customers" required></select>
+                                <select id="customers" class="form-control js-example-basic-single" asp-items="@ViewBag.customers" required>
+                                    <option value=""></option>
+                                </select>
                             </div>
+
                             <div class="form-group col-xs-12 col-sm-6 col-lg-4">
                                 <label class="form-control-label">Branch</label>
-                                <input class="form-control" type="text" readonly>
+                                <select id="customer_branch" class="form-control js-example-basic-single"></select>
                             </div>
                         </div><hr />
 
                         <div class="row">
                             <div class="form-group col-xs-12 col-sm-6 col-lg-4">
                                 <label class="form-control-label">Barcode</label>
-                                <input class="form-control" type="text">
+                                <input id="barcode" class="form-control" type="text" autofocus>
                             </div>
                         </div>
 
@@ -85,57 +87,23 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script type="text/javascript">
-        let userGroups = new Array();
         $(function () {
-            let userDetail = @Html.Raw(Json.Serialize(Model));
-            userGroups = userDetail.assignedGroups;
-            populateGroupTable();
-
-            let notificationType = "danger"; // success
-            $('#add-group').on('click', function () {
-                let group = $("#group").val();
-                if (!group) {
-                    notify('Kindly select the group', notificationType);
-                    return
-                }
-                var details = userGroups.filter(p => p.group === group);
-                if (details[0]) {
-                    notify('Sorry, Group already exist', notificationType);
-                    return
-                }
-
-                userGroups.push({
-                    group: group
-                });
-
-                populateGroupTable();
-            });
-
-            $('#save').on('click', function () {
-                let accesslevel = $('#general').is(':checked') ? 1 : 2;
-                var id = $("#id").val();
-                debugger
-                let user = {
-                    id: $("#id").val(),
-                    userID: $("#userID").val(),
-                    names: $("#names").val(),
-                    password: $("#password").val(),
-                    confirmPassword: $("#confirmPassword").val(),
-                    email: $("#email").val(),
-                    phone: $("#phone").val(),
-                    site: $("#user-site").val(),
-                    status: $('#status').is(':checked'),
-                    accessLevel: accesslevel,
-                    assignedGroups: userGroups,
-                };
-
+            $('#barcode').val('');
+            $('#customer_branch').prop('disabled', true);
+            $('#customers').on('change', function () {
+                $('#barcode').focus();
+                $('#customer_branch').empty();
                 $.ajax({
-                    type: 'POST',
-                    url: "editUser",
+                    type: 'GET',
+                    url: "getCustomerBranches?customerId=" + this.value,
                     contentType: 'application/json',
-                    data: JSON.stringify(user),
                     success: function (response) {
-                        $("#userID").val('');
+                        response = response ? response : [];
+                        $('#customer_branch').prop('disabled', false);
+
+                        for (var index = 0; index <= response.length; index++) {
+                            $('#customer_branch').append('<option value="' + response[index].vegId + '">' + response[index].name + '</option>');
+                        }
                     },
                     failure: function (response) {
                     }
@@ -143,28 +111,38 @@
                     // ...
                 });
             });
-        });
 
-        function removeItem(item) {
-            item = item ? item : {};
-            var index = userGroups.findIndex(p => p.group === item.group);
-            userGroups.splice(index, 1);
-            populateGroupTable();
-        }
+            $('#barcode').on('keyup', function (event) {
+                if (event.which === 13) {
+                    let client = {
+                        barcode: this.value,
+                        clientId: $("#customers").val(),
+                        branchId: $("#customer_branch").val(),
+                        date: $("#date").val(),
+                    };
 
-        function populateGroupTable() {
-            let mappedGroups = userGroups.map(s => {
-                // let transDate = new Date(s.date).toLocaleDateString();
+                    if (!client.clientId) {
+                        alert("Sorry, Kindly select the client");
+                        $("#barcode").val('');
+                        return
+                    }
 
-                return "<tr>" +
-                    "<td>" + s.group + "</td>" +
-                    "<td><a class='btn-danger btn-sm' onclick='removeItem(" + JSON.stringify(s) + ")'>Remove</a></td>" +
-                    "</tr>";
+                    $.ajax({
+                        type: 'POST',
+                        url: "getCustomerProduct",
+                        contentType: 'application/json',
+                        data: JSON.stringify(client),
+                        success: function (response) {
+                            $("#barcode").val('');
+                        },
+                        failure: function (response) {
+                            $("#barcode").val('');
+                        }
+                    }).then(function () {
+                        // ...
+                    });
+                }
             });
-
-            var strMappedGroups = mappedGroups.join('');
-            $('#items').html(strMappedGroups);
-        }
-
+        });
     </script>
 }

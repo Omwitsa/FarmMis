@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FarmMis.Controllers
 {
@@ -34,14 +35,17 @@ namespace FarmMis.Controllers
         {
             var userId = HttpContext.User.FindFirst(StrValues.UserId)?.Value ?? "";
             menuBuilder.BuildMenus(this, userId, "Packlist");
-
-            var customers = await _context.Customers.Select(s => s.Name).ToListAsync();
-            ViewBag.customers = new SelectList(customers);
-
+            await SetInitials();
             return View(new PacklistVm
             {
                 Date = DateTime.Now,
             });
+        }
+
+        private async Task SetInitials()
+        {
+            var customers = await _context.Customers.ToListAsync();
+            ViewBag.customers = new SelectList(customers, "VegId", "Name");
         }
 
         [Authorize(Roles = "Packlist")]
@@ -151,12 +155,79 @@ namespace FarmMis.Controllers
 
                 await _context.SaveChangesAsync();
                 _notyf.Success("Synched successfully");
-                return RedirectToAction("Packlist");
+                await SetInitials();
+                //return RedirectToAction("Packlist");
+                return View(packlist);
             }
             catch (Exception ex)
             {
                 _notyf.Error("Sorry, An error occurred");
                 return View(packlist);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetCustomerBranches(int customerId)
+        {
+            try
+            {
+                var branches = _context.Branches.Where(b => b.CustomerId == customerId).ToList();
+                if(!branches.Any())
+                    branches = _context.Branches.Where(b => b.VegId == 0).ToList();
+                return Json(branches);
+            }
+            catch (Exception)
+            {
+                _notyf.Error("Sorry, An error occurred");
+                return Json("");
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetCustomerProduct([FromBody] CustomerProduct customerProduct)
+        {
+            try
+            {
+                var customer = _context.Customers.FirstOrDefault(p => p.VegId == customerProduct.ClientId);
+                if (customer == null)
+                {
+                    _notyf.Error("Sorry, Customer not found");
+                    return Json("");
+                }
+                var branch = _context.Branches.FirstOrDefault(p => p.VegId == customerProduct.BranchId);
+                if (branch == null)
+                {
+                    _notyf.Error("Sorry, Customer branch not found");
+                    return Json("");
+                }
+
+                var packlist = _context.Packlists.Include(p => p.PacklistLines).FirstOrDefault(p => p.DispatchDate == customerProduct.Date 
+                && p.CustomerId == customerProduct.ClientId && p.BranchId == customerProduct.BranchId);
+
+                if(packlist == null)
+                {
+                    _notyf.Error($"Sorry, {customer.Name} {branch.Name} branch packlist not found on {customerProduct.Date}");
+                    return Json("");
+                }
+
+                var line = packlist.PacklistLines.FirstOrDefault(p => p.Barcode.ToUpper().Equals(customerProduct.Barcode));
+                if (line == null)
+                {
+                    _notyf.Error($"Sorry, {customer.Name} {branch.Name} branch didn't order the product on {customerProduct.Date}");
+                    return Json("");
+                }
+                var product = _context.Products.FirstOrDefault(p => p.VegId == line.ProductId);
+
+                return Json(new
+                {
+                    line,
+                    product
+                });
+            }
+            catch (Exception)
+            {
+                _notyf.Error("Sorry, An error occurred");
+                return Json("");
             }
         }
     }
