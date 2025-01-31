@@ -255,24 +255,29 @@ namespace FarmMis.Controllers
                 if (customerProduct.BranchId != null)
                     packlists = packlists.Where(p => p.BranchId == customerProduct.BranchId).ToList();
 
-                if(customerProduct.ClientId == null || customerProduct.BranchId == null)
-                    packlists = packlists.Take(5).ToList();
+                var packlistLines = new List<PacklistLine>();
+                foreach (var pack in packlists)
+                    foreach (var line in pack.PacklistLines)
+                        packlistLines.Add(line);
+
+                var groupedPacklists = packlistLines.GroupBy(p => p.ProductId).ToList();
 
                 var products = await _context.Products.ToListAsync();
                 var orderedProducts = new List<dynamic>();
-                foreach (var pack in packlists)
+                foreach (var packProducts in groupedPacklists)
                 {
-                    foreach (var line in pack.PacklistLines)
+                   
+                    var item = packProducts.FirstOrDefault();
+                    var vegId = item?.ProductId ?? 0;
+                    var product = products.FirstOrDefault(p => p.VegId == vegId);
+                    var name = product?.Name ?? "";
+                    orderedProducts.Add(new
                     {
-                        var product = products.FirstOrDefault(p => p.VegId == line.ProductId);
-                        orderedProducts.Add(new
-                        {
-                            product = product.Name,
-                            boxQty = line.BoxQty,
-                            scanQty = line.ScanQty,
-                            barcode = line.Barcode,
-                        });
-                    }
+                        product = name,
+                        boxQty = packProducts.Sum(p => p.BoxQty),
+                        scanQty = packProducts.Sum(p => p.ScanQty),
+                        barcode = item?.Barcode ?? ""
+                    });
                 }
 
                 return Json(new
