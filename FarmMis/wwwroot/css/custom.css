@@ -9,3 +9,7 @@ thead, tfoot { display: table-row-group }
     -webkit-transform: rotate(-180deg);
     -moz-transform: rotate(-180deg);
 }
+.item-display{
+    color:green;
+    font-size: 25px;
+}
