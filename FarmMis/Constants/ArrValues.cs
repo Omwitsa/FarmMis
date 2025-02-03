@@ -57,6 +57,13 @@ namespace FarmMis.Constants
                 Action = "Packlist",
             },
             //new PrivilegeVm {
+            //    Code = "1102",
+            //    Name = "PostScannedPacklist",
+            //    ParentCode = "11",
+            //    Controller = "Packhouse",
+            //    Action = "PostScannedPacklist",
+            //},
+            //new PrivilegeVm {
             //    Code = "1101",
             //    Name = "Utilities",
             //    ParentCode = "11",

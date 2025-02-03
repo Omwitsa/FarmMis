@@ -1,6 +1,7 @@
 ﻿using FarmMis.Controllers;
 using FarmMis.IProvider;
 using FarmMis.Utilities;
+using FarmMis.ViewModel;
 using Org.BouncyCastle.Asn1.IsisMtt.X509;
 
 namespace FarmMis.Provider
@@ -18,6 +19,12 @@ namespace FarmMis.Provider
         public Task<string> GetPackList(string farm, string date)
         {
             var response = _httpActions.Get($"orders/packlist/packlist_data.php?farm={farm}&date={date}");
+            return response;
+        }
+
+        public Task<string> PostScannedPacklist(PacklistLineVm packlistLineVm)
+        {
+            var response = _httpActions.Post("orders/packlist/function.php", packlistLineVm);
             return response;
         }
 

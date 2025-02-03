@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Microsoft.IdentityModel.Tokens;
+using DocumentFormat.OpenXml.ExtendedProperties;
 
 namespace FarmMis.Controllers
 {
@@ -42,6 +43,57 @@ namespace FarmMis.Controllers
             });
         }
 
+        public async Task<IActionResult> PostScannedPacklist()
+        {
+            try
+            {
+                await SetInitials();
+                var setup = _context.SysSetup.FirstOrDefault();
+                if (setup == null)
+                {
+                    _notyf.Error("Sorry, System settings not found");
+                    return RedirectToAction("Packlist");
+                }
+                if (string.IsNullOrEmpty(setup.Farm))
+                {
+                    _notyf.Error("Sorry, Farm has not been set up");
+                    return RedirectToAction("Packlist");
+                }
+
+                var packlistLines = _context.PacklistLines.Where(l => !l.Posted && l.ScanQty > 0).ToList();
+
+                var filteredLines = packlistLines.Select(l => new PacklistLine
+                {
+                    VegLineId = l.VegLineId,
+                    ScanQty = l.ScanQty,
+                }).ToList();
+                var packlistLineVm = new PacklistLineVm { Operation = "postScannedPacklist", Farm = setup.Farm, PacklistLines = filteredLines };
+
+                var packlistResults = _portalProxy.PostScannedPacklist(packlistLineVm).Result;
+                var packlistobj = JsonConvert.DeserializeObject<ReturnData<string>>(packlistResults);
+
+                if (!packlistobj.Success)
+                {
+                    _notyf.Error(packlistobj.Message);
+                    return RedirectToAction("Packlist");
+                }
+
+                foreach (var line in packlistLines)
+                    line.Posted = true;
+
+                if(packlistLines.Any())
+                    _context.SaveChanges();
+
+                _notyf.Success("Posted successfully");
+                return RedirectToAction("Packlist");
+            }
+            catch (Exception)
+            {
+                _notyf.Error("Sorry, An error occurred");
+                return RedirectToAction("Packlist");
+            }
+        }
+
         private async Task SetInitials()
         {
             var customers = await _context.Customers.ToListAsync();
@@ -62,7 +114,12 @@ namespace FarmMis.Controllers
                     _notyf.Error("Sorry, System settings not found");
                     return View(packlist);
                 }
-                setup.Farm = setup?.Farm ?? "";
+                if (string.IsNullOrEmpty(setup.Farm))
+                {
+                    _notyf.Error("Sorry, Farm has not been set up");
+                    return View(packlist);
+                }
+
                 string date = packlist.Date.ToString("yyyyMMddHHmmss");
                 var packlistResults = _portalProxy.GetPackList(setup.Farm, date).Result;
                 var packlistobj = JsonConvert.DeserializeObject<dynamic>(packlistResults);

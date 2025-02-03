@@ -13,5 +13,6 @@ namespace FarmMis.Models
         public int ScanQty { get; set; } = 0;
         [StringLength(50)]
         public string? Barcode { get; set; }
+        public bool Posted { get; set; } = false;
     }
 }

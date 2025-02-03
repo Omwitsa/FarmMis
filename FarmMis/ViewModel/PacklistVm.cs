@@ -1,4 +1,6 @@
-﻿namespace FarmMis.ViewModel
+﻿using FarmMis.Models;
+
+namespace FarmMis.ViewModel
 {
     public class PacklistVm
     {
@@ -11,5 +13,12 @@
         public int? ClientId { get; set; }
         public int? BranchId { get; set; }
         public DateTime? Date { get; set; }
+    }
+
+    public class PacklistLineVm
+    {
+        public string? Operation { get; set; }
+        public string? Farm { get; set; }
+        public List<PacklistLine>? PacklistLines { get; set; }
     }
 }

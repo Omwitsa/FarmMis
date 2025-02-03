@@ -129,6 +129,9 @@ namespace FarmMis.Migrations
                     b.Property<int?>("PacklistId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Posted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
 

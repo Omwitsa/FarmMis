@@ -191,7 +191,8 @@ namespace FarmMis.Migrations
                     BoxQty = table.Column<int>(type: "int", nullable: true),
                     ScanQty = table.Column<int>(type: "int", nullable: false),
                     Barcode = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Posted = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
